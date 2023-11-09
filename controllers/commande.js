@@ -1,7 +1,11 @@
+const jwt = require("jsonwebtoken")
 const Commande = require("../models/commande");
 const Product = require("../models/product");
 
 const addCommande = async (req, res) => {
+    const token = req.headers.authorization.split(" ")[1]
+    const decodedToken = jwt.verify(token, "RANDOM_TOKEN_SECRET")
+    const userId = decodedToken.userId
     try {
         const newCommande = new Commande(req.body);
         let totalPrice = 0; // Initialisez la variable du prix total à zéro
@@ -28,7 +32,7 @@ const addCommande = async (req, res) => {
 
         // Affectez le prix total à la propriété "prixTotal" de la commande
         newCommande.prixTotal = totalPrice;
-
+        newCommande.client=userId;
         // Si toutes les vérifications passent, enregistrez la commande
         await newCommande.save();
 

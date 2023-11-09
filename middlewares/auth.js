@@ -45,6 +45,7 @@ module.exports.isAdmin=(req,res,next)=>{
   }
 }
   module.exports.isClient=(req,res,next)=>{
+    
     try {
       if(req.auth.role==="user"){
         next()
